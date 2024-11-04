@@ -1,6 +1,7 @@
 package org.softserveinc.java_be_genai_plgrnd.models;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -99,5 +100,22 @@ public class ArticleEntity {
 
     public void setComments(Set<CommentEntity> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ArticleEntity that)) {
+            return false;
+        }
+
+        return Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(title);
     }
 }
