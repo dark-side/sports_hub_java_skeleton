@@ -1,7 +1,6 @@
 package org.softserveinc.java_be_genai_plgrnd.models;
 
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -14,25 +13,24 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "app_user")
 @EntityListeners(AuditingEntityListener.class)
-public class CommentEntity {
-
+public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "article_id", nullable = false)
-    private ArticleEntity article;
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private String content;
+    private String password;
 
     @Column(name = "creation_timestamp", nullable = false, updatable = false)
     @CreatedDate
@@ -42,8 +40,6 @@ public class CommentEntity {
     @LastModifiedDate
     private ZonedDateTime lastUpdateTimestamp;
 
-    // Getters and Setters
-
     public UUID getId() {
         return id;
     }
@@ -52,20 +48,28 @@ public class CommentEntity {
         this.id = id;
     }
 
-    public ArticleEntity getArticle() {
-        return article;
+    public String getUsername() {
+        return username;
     }
 
-    public void setArticle(ArticleEntity article) {
-        this.article = article;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getContent() {
-        return content;
+    public String getEmail() {
+        return email;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public ZonedDateTime getCreationTimestamp() {
@@ -82,29 +86,5 @@ public class CommentEntity {
 
     public void setLastUpdateTimestamp(ZonedDateTime lastUpdateTimestamp) {
         this.lastUpdateTimestamp = lastUpdateTimestamp;
-    }
-
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof CommentEntity that)) {
-            return false;
-        }
-
-        return Objects.equals(id, that.id)
-            && Objects.equals(content, that.content)
-            && Objects.equals(creationTimestamp, that.creationTimestamp)
-            && Objects.equals(lastUpdateTimestamp, that.lastUpdateTimestamp);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + Objects.hashCode(content);
-        result = 31 * result + Objects.hashCode(creationTimestamp);
-        result = 31 * result + Objects.hashCode(lastUpdateTimestamp);
-        return result;
     }
 }

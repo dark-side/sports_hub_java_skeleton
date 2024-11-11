@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: java_be_genai_plgrnd
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/java_be_genai_plgrnd
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  private-key: classpath:jwt/app.key
+  public-key: classpath:jwt/app.pub

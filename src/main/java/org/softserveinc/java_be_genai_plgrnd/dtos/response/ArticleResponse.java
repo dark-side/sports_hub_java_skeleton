@@ -16,7 +16,7 @@ public record ArticleResponse(
     ZonedDateTime creationTimestamp,
     ZonedDateTime lastUpdateTimestamp
 ) {
-    public static ArticleResponse fromEntity(ArticleDTO entity) {
+    public static ArticleResponse fromDTO(ArticleDTO entity) {
         final var comments = entity.comments() == null
             ? Set.<CommentResponse>of()
             : entity.comments().stream().map(CommentResponse::fromDTO).collect(Collectors.toSet());

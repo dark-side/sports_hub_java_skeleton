@@ -5,12 +5,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "article")
+@EntityListeners(AuditingEntityListener.class)
 public class ArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,12 +39,12 @@ public class ArticleEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentEntity> comments;
 
-    @Column(nullable = false)
-    @CreationTimestamp
+    @Column(name = "creation_timestamp", nullable = false, updatable = false)
+    @CreatedDate
     private ZonedDateTime creationTimestamp;
 
-    @Column(nullable = false)
-    @UpdateTimestamp
+    @Column(name = "last_update_timestamp", nullable = false)
+    @LastModifiedDate
     private ZonedDateTime lastUpdateTimestamp;
 
     // Getters and Setters
