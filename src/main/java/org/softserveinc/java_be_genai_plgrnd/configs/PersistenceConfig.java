@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaAuditing(dateTimeProviderRef = "auditingZonedDateTimeProvider")
+@EnableJpaAuditing(
+    dateTimeProviderRef = "auditingZonedDateTimeProvider",
+    auditorAwareRef = PersistenceConfig.AUDITOR_AWARE
+)
 public class PersistenceConfig {
+    public static final String AUDITOR_AWARE = "auditorAware";
 
     @Bean
     public DateTimeProvider auditingZonedDateTimeProvider() {

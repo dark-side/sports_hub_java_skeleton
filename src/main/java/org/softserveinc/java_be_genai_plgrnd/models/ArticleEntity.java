@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +17,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -35,6 +38,11 @@ public class ArticleEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @CreatedBy
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "author_id", nullable = false, updatable = false)
+    private UserEntity author;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentEntity> comments;
