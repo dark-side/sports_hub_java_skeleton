@@ -8,5 +8,7 @@ public record CreateArticleRequest(
     @NotBlank
     String shortDescription,
     @NotBlank
-    String description
+    String description,
+    @NotBlank
+    String image
 ) { }

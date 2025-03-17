@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,6 +39,10 @@ public class ArticleEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_id", nullable = false)
+    private ImageStorageEntity imageStorage;
 
     @CreatedBy
     @ManyToOne(optional = false)
@@ -87,6 +92,22 @@ public class ArticleEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ImageStorageEntity getImageStorage() {
+        return imageStorage;
+    }
+
+    public void setImageStorage(ImageStorageEntity imageStorage) {
+        this.imageStorage = imageStorage;
+    }
+
+    public UserEntity getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(UserEntity author) {
+        this.author = author;
     }
 
     public ZonedDateTime getCreationTimestamp() {

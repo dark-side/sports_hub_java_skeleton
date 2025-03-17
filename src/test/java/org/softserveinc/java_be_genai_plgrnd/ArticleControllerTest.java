@@ -29,7 +29,7 @@ class ArticleControllerTest extends IntegrationTestContainerBase {
         given()
             .contentType(ContentType.JSON)
             .when()
-            .get("/articles/")
+            .get("/api/articles/")
             .then()
             .statusCode(200)
             .body("size()", is(20));

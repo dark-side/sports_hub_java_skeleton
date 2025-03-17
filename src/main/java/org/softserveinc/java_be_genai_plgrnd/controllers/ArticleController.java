@@ -24,7 +24,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Article", description = "Articles API")
 @RestController
-@RequestMapping(path = "/articles", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/articles", produces = APPLICATION_JSON_VALUE)
 @Validated
 public class ArticleController {
     private final ArticleService articleService;

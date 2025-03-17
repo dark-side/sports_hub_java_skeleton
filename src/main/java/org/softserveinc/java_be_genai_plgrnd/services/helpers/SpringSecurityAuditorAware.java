@@ -23,6 +23,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<UserEntity> {
     public Optional<UserEntity> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
             .map(SecurityContext::getAuthentication)
+            .filter(JwtAuthenticationToken.class::isInstance)
             .map(JwtAuthenticationToken.class::cast)
             .filter(JwtAuthenticationToken::isAuthenticated)
             .map(JwtAuthenticationToken::getName)
