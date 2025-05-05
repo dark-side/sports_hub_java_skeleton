@@ -2,8 +2,6 @@ spring:
   application:
     name: java_be_genai_plgrnd
 
-server:
-  port: 3002
 
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/java_be_genai_plgrnd
@@ -18,3 +16,6 @@ server:
 jwt:
   private-key: classpath:jwt/app.key
   public-key: classpath:jwt/app.pub
+
+server:
+  port: 3002

@@ -25,11 +25,11 @@ class ArticleControllerTest extends IntegrationTestContainerBase {
     }
 
     @Test
-    void shouldGetAllCustomers() {
+    void shouldGetAllArticles() {
         given()
             .contentType(ContentType.JSON)
             .when()
-            .get("/api/articles/")
+            .get("/api/articles")
             .then()
             .statusCode(200)
             .body("size()", is(20));
