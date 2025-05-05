@@ -24,9 +24,6 @@ public class UserEntity {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -46,14 +43,6 @@ public class UserEntity {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {

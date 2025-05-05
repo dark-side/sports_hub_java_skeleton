@@ -23,11 +23,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationTokenDTO authenticate(final AuthenticationRequest request) {
 
         final var authToken = UsernamePasswordAuthenticationToken
-            .unauthenticated(request.email(), request.password());
+            .unauthenticated(request.authenticationDetails().email(), request.authenticationDetails().password());
 
         authenticationManager.authenticate(authToken);
 
-        final var token = jwtService.generateToken(request.email());
-        return new AuthenticationTokenDTO(token);
+        final var token = jwtService.generateToken(request.authenticationDetails().email());
+        return new AuthenticationTokenDTO(
+            null,
+            request.authenticationDetails().email(),
+            token
+        );
     }
 }

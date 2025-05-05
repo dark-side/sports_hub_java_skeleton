@@ -1,9 +1,11 @@
 package org.softserveinc.java_be_genai_plgrnd.controllers;
 
+import java.util.Base64;
 import java.util.UUID;
 
 import org.softserveinc.java_be_genai_plgrnd.services.ImageStorageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Image", description = "Images API")
 @RestController
-@RequestMapping(path = "/api/images", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/images")
 @Validated
 public class ImageController {
 
@@ -29,10 +30,20 @@ public class ImageController {
     }
 
     @Operation(summary = "Get image by ID")
-    @GetMapping("/{imageId}")
-    public ResponseEntity<String> getImage(@PathVariable UUID imageId) {
+    @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable UUID imageId) {
         return imageStorageService.getBase64ImageById(imageId)
-            .map(image -> new ResponseEntity<>(image, HttpStatus.OK))
+            .map(base64Image -> {
+                var cleanBase64 = base64Image;
+                if (base64Image.contains(",")) {
+                    cleanBase64 = base64Image.split(",")[1];
+                }
+
+                return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_PNG)
+                    .body(Base64.getDecoder().decode(cleanBase64));
+            })
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

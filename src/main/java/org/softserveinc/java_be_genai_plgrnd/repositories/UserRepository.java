@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
-    boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     Optional<UserEntity> findByEmail(String email);
 }

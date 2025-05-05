@@ -2,6 +2,9 @@ spring:
   application:
     name: java_be_genai_plgrnd
 
+server:
+  port: 3002
+
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/java_be_genai_plgrnd
     username: ${DB_USERNAME}

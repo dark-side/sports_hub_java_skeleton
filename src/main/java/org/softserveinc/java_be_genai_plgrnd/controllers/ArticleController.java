@@ -34,7 +34,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "Find all articles with comments")
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<ArticleResponse>> findAllWithComments() {
         return ResponseEntity.ok(
             articleService.findAllWithComments()
@@ -54,7 +54,7 @@ public class ArticleController {
 
     @Operation(summary = "Create an article")
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<ArticleResponse> createArticle(
         @RequestBody @Valid CreateArticleRequest request
     ) {

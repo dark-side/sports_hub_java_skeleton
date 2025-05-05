@@ -1,12 +1,10 @@
 package org.softserveinc.java_be_genai_plgrnd.dtos.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 
 public record AuthenticationRequest(
-    @NotBlank
-    @Email
-    String email,
-    @NotBlank
-    String password
+    @NotNull
+    @JsonProperty("user")
+    AuthenticationDetails authenticationDetails
 ) { }

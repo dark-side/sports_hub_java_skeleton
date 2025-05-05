@@ -58,6 +58,6 @@ public record ArticleResponse(
     }
 
     private static String buildImageUrl(ImageStorageDTO imageStorageDTO) {
-        return "http://127.0.0.1:8080/api/images/" + imageStorageDTO.id();
+        return "http://127.0.0.1:3002/api/images/" + imageStorageDTO.id();
     }
 }

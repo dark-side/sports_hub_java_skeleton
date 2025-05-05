@@ -21,7 +21,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Auth", description = "Auth API")
 @RestController
-@RequestMapping(path = "/auth", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(produces = APPLICATION_JSON_VALUE)
 @Validated
 public class AuthController {
 
@@ -36,7 +36,7 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/users")
     public ResponseEntity<UserResponse> registerUser(
         @Valid @RequestBody CreateUserRequest registrationDTO
     ) {
@@ -47,7 +47,7 @@ public class AuthController {
         );
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/auth/sign_in")
     public ResponseEntity<AuthenticationTokenResponse> authenticate(
         @Valid @RequestBody AuthenticationRequest authenticationRequest
     ) {

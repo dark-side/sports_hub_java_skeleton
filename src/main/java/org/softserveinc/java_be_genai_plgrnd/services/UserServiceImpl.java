@@ -22,15 +22,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO registerUser(CreateUserDTO request) {
-        if (userRepository.existsByUsername(request.username())
-            || userRepository.existsByEmail(request.email())) {
-
-            throw new ResourceConflictException(
-                "Username or Email already exists");
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ResourceConflictException("Email already exists");
         }
 
         final var user = new UserEntity();
-        user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
 
