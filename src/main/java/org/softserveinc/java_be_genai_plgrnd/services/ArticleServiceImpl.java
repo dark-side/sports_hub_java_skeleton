@@ -89,4 +89,32 @@ public class ArticleServiceImpl implements ArticleService {
         article.setImageStorage(image);
         return ArticleDTO.fromEntity(articleRepository.save(article), Collections.emptyList());
     }
+
+    /**
+     * Update an existing article.
+     *
+     * @param id         the ID of the article to update
+     * @param updateDTO  the data to update the article with
+     * @return updated article
+     * @throws ResourceNotFoundException if no article is found with the given ID
+     */
+    @Override
+    @Transactional
+    public ArticleDTO updateArticle(String id, CreateArticleDTO updateDTO) {
+        var article = articleRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Article", id));
+
+        article.setTitle(updateDTO.title());
+        article.setShortDescription(updateDTO.shortDescription());
+        article.setDescription(updateDTO.description());
+
+        if (updateDTO.image() != null && !updateDTO.image().isEmpty()) {
+            var image = article.getImageStorage();
+            image.setImage(updateDTO.image());
+            article.setImageStorage(image);
+        }
+
+        var updated = articleRepository.save(article);
+        return ArticleDTO.fromEntity(updated, List.of());
+    }
 }

@@ -8,7 +8,9 @@ import org.softserveinc.java_be_genai_plgrnd.dtos.response.UserResponse;
 import org.softserveinc.java_be_genai_plgrnd.services.UserService;
 import org.softserveinc.java_be_genai_plgrnd.services.auth.AuthenticationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -54,6 +59,14 @@ public class AuthController {
         return ResponseEntity.ok(
             AuthenticationTokenResponse.fromDTO(authenticationService.authenticate(authenticationRequest))
         );
+    }
+
+    @DeleteMapping("/api/auth/sign_out")
+    public ResponseEntity<Map<String, String>> signOut() {
+        SecurityContextHolder.clearContext();
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Signed out successfully.");
+        return ResponseEntity.ok(response);
     }
 
 }
