@@ -1,10 +1,7 @@
 package org.softserveinc.java_be_genai_plgrnd.dtos.business;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.softserveinc.java_be_genai_plgrnd.models.ArticleEntity;
@@ -23,20 +20,28 @@ public record ArticleDTO(
     ZonedDateTime lastUpdateTimestamp
 ) {
     public static ArticleDTO fromEntity(ArticleEntity entity, List<ReactionEntity> reactions) {
-        final var comments = entity.getComments() == null
-            ? Set.<CommentDTO>of()
-            : entity.getComments().stream().map(CommentDTO::fromEntity).collect(Collectors.toSet());
+        Set<CommentDTO> comments = entity.getComments() == null
+                ? Set.of()
+                : entity.getComments().stream()
+                .map(CommentDTO::fromEntity)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        Map<ReactionType, Integer> reactionsCount = getReactionsCount(reactions);
+
+        ImageStorageDTO image = entity.getImageStorage() != null
+                ? ImageStorageDTO.fromEntity(entity.getImageStorage())
+                : null;
 
         return new ArticleDTO(
-            entity.getId(),
-            entity.getTitle(),
-            entity.getShortDescription(),
-            entity.getDescription(),
-            ImageStorageDTO.fromEntity(entity.getImageStorage()),
-            comments,
-            getReactionsCount(reactions),
-            entity.getCreationTimestamp(),
-            entity.getLastUpdateTimestamp()
+                entity.getId(),
+                entity.getTitle(),
+                entity.getShortDescription(),
+                entity.getDescription(),
+                image,
+                comments,
+                reactionsCount,
+                entity.getCreationTimestamp(),
+                entity.getLastUpdateTimestamp()
         );
     }
 
@@ -44,8 +49,12 @@ public record ArticleDTO(
         if (reactions == null || reactions.isEmpty()) {
             return Map.of();
         }
-        return reactions.stream()
-            .collect(Collectors.groupingBy(ReactionEntity::getReactionType, Collectors.summingInt(r -> 1)));
 
+        Map<ReactionType, Integer> map = new EnumMap<>(ReactionType.class);
+        for (ReactionEntity reaction : reactions) {
+            map.merge(reaction.getReactionType(), 1, Integer::sum);
+        }
+        return map;
     }
+
 }

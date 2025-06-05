@@ -1,9 +1,7 @@
 package org.softserveinc.java_be_genai_plgrnd.dtos.response;
 
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.softserveinc.java_be_genai_plgrnd.dtos.business.ArticleDTO;
 import org.softserveinc.java_be_genai_plgrnd.dtos.business.CommentDTO;
@@ -34,9 +32,8 @@ public record ArticleResponse(
     ZonedDateTime lastUpdateTimestamp
 ) {
     public static ArticleResponse fromDTO(ArticleDTO entityDTO) {
-        final var comments = entityDTO.comments() == null
-            ? List.<String>of()
-            : entityDTO.comments()
+        List<String> comments = Optional.ofNullable(entityDTO.comments())
+                .orElseGet(Set::of) // бо це Set<CommentDTO>
                 .stream()
                 .sorted(Comparator.comparing(CommentDTO::creationTimestamp).reversed())
                 .map(CommentDTO::content)
@@ -58,6 +55,9 @@ public record ArticleResponse(
     }
 
     private static String buildImageUrl(ImageStorageDTO imageStorageDTO) {
+        if (imageStorageDTO == null || imageStorageDTO.id() == null) {
+            return null;
+        }
         return "http://127.0.0.1:3002/api/images/" + imageStorageDTO.id();
     }
 }
