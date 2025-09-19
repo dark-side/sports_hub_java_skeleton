@@ -1,27 +1,27 @@
-FROM eclipse-temurin:21.0.5_11-jdk-alpine AS build
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21.0.5_11-jdk-jammy AS build
 WORKDIR /project
 
-# Copy the Maven Wrapper files
 COPY .mvn/ .mvn
 COPY mvnw .
 COPY pom.xml .
+RUN chmod +x mvnw && ./mvnw -B -q dependency:go-offline
 
-# Ensure the Maven Wrapper is executable + Download dependencies
-RUN chmod +x mvnw && \
-    ./mvnw dependency:go-offline
-
-# Copy the source code and build the application
 COPY src ./src
-RUN ./mvnw package -DskipTests
+RUN ./mvnw -B -q package -DskipTests
 
-FROM eclipse-temurin:21.0.5_11-jre-alpine
-RUN apk add dumb-init && \
-    mkdir /app && \
-    addgroup --system javauser && \
-    adduser -S -s /bin/false -G javauser javauser && \
-    rm -rf /var/cache/apk/*
-COPY --from=build /project/target/*.jar /app/app.jar
+FROM --platform=$TARGETPLATFORM eclipse-temurin:21.0.5_11-jre-jammy
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends dumb-init \
+ && groupadd --system javauser \
+ && useradd -r -s /usr/sbin/nologin -g javauser javauser \
+ && mkdir /app && chown -R javauser:javauser /app \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-RUN chown -R javauser:javauser /app
+COPY --from=build /project/target/*.jar /app/app.jar
 USER javauser
+
 CMD ["dumb-init", "java", "-jar", "app.jar"]
