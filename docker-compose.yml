@@ -3,7 +3,7 @@ services:
     image: postgres:17.0
     restart: always
     volumes:
-      - '/var/lib/postgresql/data:/var/lib/postgresql/data'
+      - postgres_data:/var/lib/postgresql/data
     expose:
       - "5432"
     ports:
@@ -39,3 +39,6 @@ services:
     restart: always
     environment:
       REACT_APP_API_URL: "http://localhost:3002"
+
+volumes:
+  postgres_data:

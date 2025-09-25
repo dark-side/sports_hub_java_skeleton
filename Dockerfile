@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.5_11-jdk-alpine AS build
+FROM maven:latest AS build
 WORKDIR /project
 
 COPY .mvn/ .mvn
@@ -10,11 +10,14 @@ RUN chmod +x mvnw && ./mvnw -B -q dependency:go-offline
 COPY src ./src
 RUN ./mvnw -B -q package -DskipTests
 
-FROM eclipse-temurin:21.0.5_11-jre-alpine
-RUN apk add --no-cache dumb-init && \
-    addgroup --system javauser && \
-    adduser -S -s /sbin/nologin -G javauser javauser && \
-    mkdir /app && chown -R javauser:javauser /app
+FROM maven:latest
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends dumb-init \
+ && groupadd --system javauser \
+ && useradd -r -s /usr/sbin/nologin -g javauser javauser \
+ && mkdir /app && chown -R javauser:javauser /app \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=build /project/target/*.jar /app/app.jar
 USER javauser
