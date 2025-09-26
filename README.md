@@ -14,7 +14,7 @@ This is a draft pet project for testing Generative AI on different software engi
 - Docker Compose
 
 The mentioned dependencies can be installed using the official documentation [here](https://docs.docker.com/compose/install/).
-[Podman](https://podman-desktop.io/docs/compose) can be used as an alternative to Docker.
+Read more about alternatives to Docker [here](https://github.com/dark-side/sports_hub_angular_skeleton/blob/main/READMORE_DockerAlternatives.md).
 
 ## Project back-end stack and toolset
 It includes Spring Boot 3.3.x, Postgres, Docker.
