@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -41,7 +42,8 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping({"/users", "/users/registrations"})
+    @Operation(summary = "Register a new user", description = "Register a new user with email and password")
+    @PostMapping("/users/registrations")
     public ResponseEntity<UserResponse> registerUser(
         @Valid @RequestBody CreateUserRequest registrationDTO
     ) {
@@ -52,6 +54,7 @@ public class AuthController {
         );
     }
 
+    @Operation(summary = "Sign in", description = "Authenticate user and get JWT token")    
     @PostMapping("/api/auth/sign_in")
     public ResponseEntity<AuthenticationTokenResponse> authenticate(
         @Valid @RequestBody AuthenticationRequest authenticationRequest
@@ -60,7 +63,8 @@ public class AuthController {
             AuthenticationTokenResponse.fromDTO(authenticationService.authenticate(authenticationRequest))
         );
     }
-
+    
+    @Operation(summary = "Sign out", description = "Sign out current user")
     @DeleteMapping("/api/auth/sign_out")
     public ResponseEntity<Map<String, String>> signOut() {
         SecurityContextHolder.clearContext();
